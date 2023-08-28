@@ -7,37 +7,43 @@ import pickle
 import boto3
 from io import BytesIO
 
-# Your S3 Bucket details
-bucket_name = "nextbikeapibucket"
-file_key = "saved_dictionary.pkl"
+# Initialize session state if it hasn't been initialized yet
+if 'dataframes' not in st.session_state:
+    # Your S3 Bucket details
+    bucket_name = "nextbikeapibucket"
+    file_key = "saved_dictionary.pkl"
 
-# Your AWS Credentials
-aws_access_key_id = "AKIAWDTQFMVEMYWGYRFJ"
-aws_secret_access_key = "p0lwbrRwVKdDx62Oxyt4UbYnmVo5ZDNZC6t6Evpg"
-aws_session_token = None  # Optional, use only if you are using temporary credentials
+    # Your AWS Credentials
+    aws_access_key_id = "AKIAWDTQFMVEMYWGYRFJ"
+    aws_secret_access_key = "p0lwbrRwVKdDx62Oxyt4UbYnmVo5ZDNZC6t6Evpg"
+    aws_session_token = None  # Optional, use only if you are using temporary credentials
 
-# Initialize a session using Amazon S3
-session = boto3.Session(
-    aws_access_key_id=aws_access_key_id,
-    aws_secret_access_key=aws_secret_access_key,
-    aws_session_token=aws_session_token,
-)
+    # Initialize a session using Amazon S3
+    session = boto3.Session(
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,
+        aws_session_token=aws_session_token,
+    )
 
-# Create S3 client
-s3 = session.client('s3')
+    # Create S3 client
+    s3 = session.client('s3')
 
-# Use S3 client to fetch the object
-s3_object = s3.get_object(Bucket=bucket_name, Key=file_key)
+    # Use S3 client to fetch the object
+    s3_object = s3.get_object(Bucket=bucket_name, Key=file_key)
 
-# Read the Body of the S3 object (which is a stream)
-s3_object_content = s3_object['Body'].read()
+    # Read the Body of the S3 object (which is a stream)
+    s3_object_content = s3_object['Body'].read()
 
-# Deserialize the object content to a Python dictionary
-dataframes = pickle.loads(BytesIO(s3_object_content).read())
+    # Deserialize the object content to a Python dictionary
+    dataframes = pickle.loads(BytesIO(s3_object_content).read())
+    
+    # Save the dataframes into session_state
+    st.session_state.dataframes = dataframes
 
+# Retrieve dataframes from session_state
+dataframes = st.session_state.dataframes
 
-
-
+# dataframes = pickle.loads(BytesIO(s3_object_content).read())
 
 # with open('saved_dictionary.pkl', 'rb') as f:
 #     dataframes = pickle.load(f)
