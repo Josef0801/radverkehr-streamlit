@@ -60,7 +60,7 @@ selected_dfs = st.sidebar.multiselect('Select the DataFrames', options=list(data
 
 # Date input widgets to select the time period
 start_date = st.sidebar.date_input('Start date', value=pd.to_datetime('2023-06-20').date())
-end_date = st.sidebar.date_input('End date', value=pd.to_datetime('2023-08-01').date())
+end_date = st.sidebar.date_input('End date', value=pd.to_datetime('2023-09-08').date())
 
 # Iterate over the selected DataFrames
 for key in selected_dfs:
@@ -81,14 +81,14 @@ for key in selected_dfs:
 
 
     # Generate the list of timestamps at noon and midnight for each day
-    noon_and_midnight = pd.date_range(df.index.min().date(), df.index.max().date() + pd.Timedelta(days=1), freq='12H')
+    # noon_and_midnight = pd.date_range(df.index.min().date(), df.index.max().date() + pd.Timedelta(days=1), freq='12H')
 
     # Add vertical lines at each timestamp in the list
-    for timestamp in noon_and_midnight:
-        if timestamp.hour == 0:  # 12 AM
-            plt.axvline(timestamp, color='darkgrey', linestyle='--', linewidth=2)
-        else:  # 12 PM
-            plt.axvline(timestamp, color='black', linestyle='--', linewidth=2)
+    # for timestamp in noon_and_midnight:
+    #     if timestamp.hour == 0:  # 12 AM
+    #         plt.axvline(timestamp, color='darkgrey', linestyle='--', linewidth=2)
+    #     else:  # 12 PM
+    #         plt.axvline(timestamp, color='black', linestyle='--', linewidth=2)
 
     # Set the labels and title
     plt.ylim(-10, 10)
