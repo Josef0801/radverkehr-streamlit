@@ -11,7 +11,7 @@ from io import BytesIO
 if 'dataframes' not in st.session_state:
     # Your S3 Bucket details
     bucket_name = "nextbikeapibucket"
-    file_key = "saved_dictionary.pkl"
+    file_key = "joined_left_station.pkl"
 
     # Your AWS Credentials
     aws_access_key_id = st.secrets["aws_access_key_id"]
@@ -30,14 +30,15 @@ if 'dataframes' not in st.session_state:
     # Create S3 client
     s3 = session.client('s3')
 
-    # Use S3 client to fetch the object
-    s3_object = s3.get_object(Bucket=bucket_name, Key=file_key)
+    with st.spinner('Loading NextBikeAPI data'):
+        # Use S3 client to fetch the object
+        s3_object = s3.get_object(Bucket=bucket_name, Key=file_key)
+    
+        # Read the Body of the S3 object (which is a stream)
+        s3_object_content = s3_object['Body'].read()
 
-    # Read the Body of the S3 object (which is a stream)
-    s3_object_content = s3_object['Body'].read()
-
-    # Deserialize the object content to a Python dictionary
-    dataframes = pickle.loads(BytesIO(s3_object_content).read())
+        # Deserialize the object content to a Python dictionary
+        dataframes = pickle.loads(BytesIO(s3_object_content).read())
     
     # Save the dataframes into session_state
     st.session_state.dataframes = dataframes
