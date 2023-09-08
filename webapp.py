@@ -14,9 +14,11 @@ if 'dataframes' not in st.session_state:
     file_key = "saved_dictionary.pkl"
 
     # Your AWS Credentials
-    aws_access_key_id = "AKIAWDTQFMVEMYWGYRFJ"
-    aws_secret_access_key = "p0lwbrRwVKdDx62Oxyt4UbYnmVo5ZDNZC6t6Evpg"
-    aws_session_token = None  # Optional, use only if you are using temporary credentials
+    aws_access_key_id = st.secrets["aws_access_key_id"]
+    aws_secret_access_key = st.secrets["aws_secret_access_key"]
+    # aws_access_key_id = "AKIAWDTQFMVEMYWGYRFJ"
+    # aws_secret_access_key = "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"
+    # aws_session_token = None  # Optional, use only if you are using temporary credentials
 
     # Initialize a session using Amazon S3
     session = boto3.Session(
