@@ -10,9 +10,37 @@ import pydeck as pdk
 
 # Initialize session state if it hasn't been initialized yet
 if 'dataframes' not in st.session_state:
+    # Your S3 Bucket details
+    bucket_name = "nextbikeapibucket"
+    file_key = "joined_left_station.pkl"
 
-    with open('joined_left_station.pkl', 'rb') as f:
-        st.session_state.dataframes = pickle.load(f)
+    # Your AWS Credentials
+    aws_access_key_id = st.secrets["aws_access_key_id"]
+    aws_secret_access_key = st.secrets["aws_secret_access_key"]
+    aws_session_token = None  # Optional, use only if you are using temporary credentials
+
+    # Initialize a session using Amazon S3
+    session = boto3.Session(
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,
+        aws_session_token=aws_session_token,
+    )
+
+    # Create S3 client
+    s3 = session.client('s3')
+
+    with st.spinner('Loading NextBikeAPI data'):
+        # Use S3 client to fetch the object
+        s3_object = s3.get_object(Bucket=bucket_name, Key=file_key)
+
+        # Read the Body of the S3 object (which is a stream)
+        s3_object_content = s3_object['Body'].read()
+
+        # Deserialize the object content to a Python dictionary
+        dataframes = pickle.loads(BytesIO(s3_object_content).read())
+
+    # Save the dataframes into session_state
+    st.session_state.dataframes = dataframes
 
 if 'stations_lat' not in st.session_state:
     with open('stations_lat.pkl', 'rb') as f:
@@ -25,8 +53,7 @@ if 'stations_long' not in st.session_state:
 if 'routes_df' not in st.session_state:
     st.session_state.routes_df = pd.read_csv("routes_dataframe.csv")
 
-# Retrieve dataframes from session_state
-dataframes = st.session_state.dataframes
+
 
 
 # Convert 'date_time' column to datetime type in all DataFrames
