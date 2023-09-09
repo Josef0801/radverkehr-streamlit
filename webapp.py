@@ -54,7 +54,7 @@ if 'routes_df' not in st.session_state:
     st.session_state.routes_df = pd.read_csv("routes_dataframe.csv")
 
 
-dataframes = st.session_state.dataframes = dataframes
+dataframes = st.session_state.dataframes
 
 
 # Convert 'date_time' column to datetime type in all DataFrames
