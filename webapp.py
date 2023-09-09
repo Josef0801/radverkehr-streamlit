@@ -39,9 +39,9 @@ if 'dataframes' not in st.session_state:
         # Deserialize the object content to a Python dictionary
         dataframes = pickle.loads(BytesIO(s3_object_content).read())
 
-    # Save the dataframes into session_state
-    st.session_state.dataframes = dataframes
-
+        # Save the dataframes into session_state
+        st.session_state.dataframes = dataframes
+        
 if 'stations_lat' not in st.session_state:
     with open('stations_lat.pkl', 'rb') as f:
         st.session_state.stations_lat = pickle.load(f)
@@ -54,6 +54,7 @@ if 'routes_df' not in st.session_state:
     st.session_state.routes_df = pd.read_csv("routes_dataframe.csv")
 
 
+dataframes = st.session_state.dataframes = dataframes
 
 
 # Convert 'date_time' column to datetime type in all DataFrames
