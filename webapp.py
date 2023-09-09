@@ -203,9 +203,9 @@ filtered_data = data[(data['date'] >= start_date) & (data['date'] <= end_date)]
 # Group by the from_coordinates and to_coordinates and get the popularity score
 grouped_data = filtered_data.groupby(['from_coordinates', 'to_coordinates']).size().reset_index(name='popularity')
 
-# Convert string representations to actual tuples
-grouped_data['from_coordinates'] = grouped_data['from_coordinates'].apply(eval)
-grouped_data['to_coordinates'] = grouped_data['to_coordinates'].apply(eval)
+# Convert string representations to actual lists
+grouped_data['from_coordinates'] = grouped_data['from_coordinates'].apply(lambda x: list(eval(x)))
+grouped_data['to_coordinates'] = grouped_data['to_coordinates'].apply(lambda x: list(eval(x)))
 
 # Create a 'path' column
 grouped_data['path'] = grouped_data.apply(lambda row: [row['from_coordinates'], row['to_coordinates']], axis=1)
