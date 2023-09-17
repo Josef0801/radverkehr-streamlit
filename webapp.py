@@ -235,8 +235,6 @@ st.pydeck_chart(chart)
 
 
 # -------------------------------- ROUTE PLOT
-import folium
-from streamlit_folium import folium_static
 
 st.title("Visualizing Popular Routes")
 st.write("Below you can see all the routes with more than 500 commutes. The red-ness and thickness indicate the popularity")
