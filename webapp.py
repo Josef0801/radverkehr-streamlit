@@ -51,8 +51,9 @@ if 'stations_long' not in st.session_state:
         st.session_state.stations_long = pickle.load(f)
 
 if 'routes_df' not in st.session_state:
-    st.session_state.routes_df = pd.read_csv("routes_dataframe.csv")
-
+    routes_df = pd.read_csv("routes_dataframe.csv")
+    routes_df["date"] = pd.to_datetime(routes_df["date"])
+    st.session_state.routes_df = routes_df
 
 dataframes = st.session_state.dataframes
 
